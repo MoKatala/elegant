@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Elegant Designs </title>
+    <style>
+        /* Global and Basic Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+            color: #2c3e50;
+        }
+        header {
+            background-color: #2980b9;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            cursor: pointer;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Toggle Hamburger Icon */
+        .hamburger.active .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .bar2 {
+            opacity: 0;
+        }
+        .hamburger.active .bar3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Profile Modal */
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
+        }
+        .profile-modal.active {
+            display: block;
+            transform: translateX(0);
+        }
+        .profile-modal h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2980b9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            font-size: 14px;
+            background-color: #f7f9fc;
+        }
+
+        /* Stage Navigation */
+        .stage {
+            display: none;
+            padding: 20px;
+        }
+        .stage.active {
+            display: block;
+        }
+
+        /* Gallery for Housing Plans and Land Listings */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .gallery-item {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 250px;
+            max-width: 30%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .gallery-item:hover, .gallery-item.selected {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid #27ae60;
+            background-color: #d1f7d1;
+        }
+        .gallery-item img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .gallery-item h3, .gallery-item p {
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 0%;
+            background-color: #27ae60;
+            height: 20px;
+            border-radius: 5px;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        /* Horizontal Button Alignment */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        /* Flex Centering for Forms */
+        .form-wrapper {
+            width: 100%;
+            max-width: 600px;
+            background-color: #f0f0f0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        /* Responsive Design */
+        @media only screen and (max-width: 768px) {
+            .gallery {
+                flex-direction: column;
+            }
+            .gallery-item {
+                width: 100%;
+            }
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Sleek Timeline in Stage 9 */
+        .timeline {
+            list-style-type: none;
+            position: relative;
+            padding-left: 0;
+            line-height: 1.8;
+        }
+        .timeline li {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 20px;
+        }
+        .timeline li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #27ae60;
+            z-index: 1;
+        }
+        .timeline li::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 24px;
+            width: 2px;
+            height: calc(100% - 5px);
+            background-color: #27ae60;
+        }
+        .timeline li.completed {
+            color: #27ae60;
+        }
+        .timeline li.pending {
+            color: #bdc3c7;
+        }
+        .timeline li.pending::before, .timeline li.pending::after {
+            background-color: #bdc3c7;
+        }
+
+        /* Centered Content with Light Background */
+        .content-container {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Close button for profile modal */
+        .close-profile {
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1> Jenga Kidigitali na Elegant </h1>
+    <!-- Hamburger Icon -->
+    <div class="hamburger-menu hamburger" id="hamburger" onclick="toggleProfile()">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+</header>
+
+<!-- Profile Modal -->
+<div class="profile-modal" id="profile-modal">
+    <button class="close-profile" onclick="toggleProfile()">Close</button>
+    <h2>User Profile</h2>
+    <form id="profile-form">
+        <!-- Basic Information -->
+        <div class="form-group">
+            <label for="profile-name">Full Name</label>
+            <input type="text" id="profile-name" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-email">Email Address</label>
+            <input type="email" id="profile-email" placeholder="example@domain.com" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-phone">Phone Number</label>
+            <input type="tel" id="profile-phone" placeholder="e.g., +1 234 567 890" required>
+        </div>
+        <!-- Other profile fields -->
+        <button type="submit">Save Profile</button>
+    </form>
+</div>
+
+<div class="container">
+    <!-- Progress Bar -->
+    <section class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+        <div class="progress-text" id="progress-text">0% Complete - Step 1 of 9</div>
+    </section>
+
+    <!-- Step 1: Find Land -->
+    <section class="stage active" id="stage-1">
+        <h2>Step 1: Find Land</h2>
+        <p>Select a plot of land:</p>
+        <div class="gallery">
+            <div class="gallery-item" onclick="selectLand(this, 'Land Plot 1', 'Dar es Salaam')">
+                <img src="https://via.placeholder.com/200" alt="Land Plot 1">
+                <h3>Land Plot 1</h3>
+                <p>Price: $20,000</p>
+                <p>Location: Dar es Salaam</p>
+            </div>
+            <div class="gallery-item" onclick="selectLand(this, 'Land Plot 2', 'Arusha')">
+                <img src="https://via.placeholder.com/200" alt="Land Plot 2">
+                <h3>Land Plot 2</h3>
+                <p>Price: $18,000</p>
+                <p>Location: Arusha</p>
+            </div>
+            <div class="gallery-item" onclick="selectLand(this, 'Land Plot 3', 'Dodoma')">
+                <img src="https://via.placeholder.com/200" alt="Land Plot 3">
+                <h3>Land Plot 3</h3>
+                <p>Price: $15,000</p>
+                <p>Location: Dodoma</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button onclick="navigateStage(1, 'next')">Next to Preview</button>
+        </div>
+    </section>
+
+    <!-- Step 2: Buy Architectural Map -->
+    <section class="stage" id="stage-2">
+        <h2>Step 2: Buy Architectural Map</h2>
+        <p>Select a housing plan:</p>
+        <div class="gallery">
+            <div class="gallery-item" onclick="selectMap(this, '2 Bedroom House Plan', 2)">
+                <img src="https://via.placeholder.com/200" alt="2 Bedroom House Plan">
+                <h3>2 Bedroom House Plan</h3>
+                <p>Price: $500</p>
+            </div>
+            <div class="gallery-item" onclick="selectMap(this, '3 Bedroom House Plan', 3)">
+                <img src="https://via.placeholder.com/200" alt="3 Bedroom House Plan">
+                <h3>3 Bedroom House Plan</h3>
+                <p>Price: $750</p>
+            </div>
+            <div class="gallery-item" onclick="selectMap(this, '4 Bedroom House Plan', 4)">
+                <img src="https://via.placeholder.com/200" alt="4 Bedroom House Plan">
+                <h3>4 Bedroom House Plan</h3>
+                <p>Price: $1000</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button onclick="navigateStage(2, 'prev')">Previous</button>
+            <button onclick="navigateStage(2, 'next')">Next to Preview</button>
+        </div>
+    </section>
+
+    <!-- Step 3: Apply for Construction Permit -->
+    <section class="stage" id="stage-3">
+        <div class="form-wrapper">
+            <h2>Step 3: Apply for Construction Permit</h2>
+            <form id="permit-form" onsubmit="submitPermitForm(event)">
+                <div class="form-group">
+                    <label for="permit-name">Your Full Name</label>
+                    <input type="text" id="permit-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="permit-email">Email Address</label>
+                    <input type="email" id="permit-email" placeholder="example@domain.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="permit-phone">Phone Number</label>
+                    <input type="tel" id="permit-phone" placeholder="e.g., +1 234 567 890" required>
+                </div>
+                <div class="form-group">
+                    <label for="permit-address">Construction Site Address</label>
+                    <input type="text" id="permit-address" placeholder="Enter the construction site address" required>
+                </div>
+                <div class="form-group">
+                    <label for="permit-permit-type">Permit Type</label>
+                    <select id="permit-permit-type">
+                        <option value="Residential">Residential Permit</option>
+                        <option value="Commercial">Commercial Permit</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="permit-expedite">Expedite Process?</label>
+                    <select id="permit-expedite">
+                        <option value="No">No (4 weeks)</option>
+                        <option value="Yes">Yes (1 week, extra $200)</option>
+                    </select>
+                </div>
+
+                <div class="nav-buttons">
+                    <button onclick="navigateStage(3, 'prev')">Previous</button>
+                    <button type="submit">Submit Permit</button>
+                    <button onclick="navigateStage(3, 'next')">Next to Preview</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Step 4: Book an Expert -->
+    <section class="stage" id="stage-4">
+        <h2>Step 4: Book an Expert</h2>
+        <p>Select a vetted expert to assist with your construction:</p>
+        <div class="gallery">
+            <div class="gallery-item" onclick="selectExpert(this, 'Expert 1', 20, 300)">
+                <img src="https://via.placeholder.com/200" alt="Expert 1">
+                <h3>Expert 1</h3>
+                <p>Projects Completed: 20</p>
+                <p>Charge: $300/day</p>
+            </div>
+            <div class="gallery-item" onclick="selectExpert(this, 'Expert 2', 15, 250)">
+                <img src="https://via.placeholder.com/200" alt="Expert 2">
+                <h3>Expert 2</h3>
+                <p>Projects Completed: 15</p>
+                <p>Charge: $250/day</p>
+            </div>
+            <div class="gallery-item" onclick="selectExpert(this, 'Expert 3', 25, 350)">
+                <img src="https://via.placeholder.com/200" alt="Expert 3">
+                <h3>Expert 3</h3>
+                <p>Projects Completed: 25</p>
+                <p>Charge: $350/day</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button onclick="navigateStage(4, 'prev')">Previous</button>
+            <button onclick="navigateStage(4, 'next')">Next to Preview</button>
+        </div>
+    </section>
+
+    <!-- Step 5: Order Detailed BOQ -->
+    <section class="stage" id="stage-5">
+        <div class="form-wrapper">
+            <h2>Step 5: Order Detailed BOQ (Bill of Quantities)</h2>
+            <form id="boq-form" onsubmit="submitBOQForm(event)">
+                <div class="form-group">
+                    <label for="boq-name">Your Full Name</label>
+                    <input type="text" id="boq-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="boq-email">Email Address</label>
+                    <input type="email" id="boq-email" placeholder="example@domain.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="boq-phone">Phone Number</label>
+                    <input type="tel" id="boq-phone" placeholder="e.g., +1 234 567 890" required>
+                </div>
+                <div class="form-group">
+                    <label for="boq-address">Construction Site Address</label>
+                    <input type="text" id="boq-address" placeholder="Enter the construction site address" required>
+                </div>
+                <div class="form-group">
+                    <label for="boq-construction-type">Type of Construction</label>
+                    <select id="boq-construction-type">
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="boq-floor-area">Floor Area (in sq meters)</label>
+                    <input type="number" id="boq-floor-area" placeholder="Enter the floor area" required>
+                </div>
+
+                <!-- Material Preferences -->
+                <h3>Material Preferences</h3>
+                <div class="form-group">
+                    <label for="boq-walls">Wall Material</label>
+                    <select id="boq-walls">
+                        <option value="Bricks">Bricks (Eco-friendly, cost-effective)</option>
+                        <option value="Concrete">Concrete</option>
+                        <option value="Wood">Wood</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="boq-roofing">Roofing Material</label>
+                    <select id="boq-roofing">
+                        <option value="Metal Sheets">Metal Sheets (Energy-efficient)</option>
+                        <option value="Tiles">Tiles</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="boq-flooring">Flooring Type</label>
+                    <select id="boq-flooring">
+                        <option value="Tiles">Tiles</option>
+                        <option value="Wood">Wood</option>
+                        <option value="Concrete">Concrete</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="boq-finishing">Finishing Preferences</label>
+                    <select id="boq-finishing">
+                        <option value="Paint">Paint</option>
+                        <option value="Plaster">Plaster</option>
+                    </select>
+                </div>
+
+                <!-- Project Timeline -->
+                <h3>Project Timeline</h3>
+                <div class="form-group">
+                    <label for="boq-start-date">Desired Start Date</label>
+                    <input type="date" id="boq-start-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="boq-end-date">Desired End Date</label>
+                    <input type="date" id="boq-end-date" required>
+                </div>
+
+                <!-- Budget and Additional Info -->
+                <div class="form-group">
+                    <label for="boq-budget">Estimated Budget (in USD)</label>
+                    <input type="number" id="boq-budget" placeholder="Enter your budget" required>
+                </div>
+                <div class="form-group">
+                    <label for="boq-notes">Additional Notes</label>
+                    <textarea id="boq-notes" rows="4" placeholder="Any additional requirements or notes..."></textarea>
+                </div>
+
+                <div class="nav-buttons">
+                    <button onclick="navigateStage(5, 'prev')">Previous</button>
+                    <button type="submit">Submit BOQ</button>
+                    <button onclick="navigateStage(5, 'next')">Next to Preview</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Step 6: Shop for Financing -->
+    <section class="stage" id="stage-6">
+        <h2>Step 6: Shop for Financing</h2>
+        <p>Explore available financing options:</p>
+        <div class="gallery">
+            <div class="gallery-item" onclick="selectFinancing(this, 'Bank A', 3.5)">
+                <img src="https://via.placeholder.com/200" alt="Bank A">
+                <h3>Bank A</h3>
+                <p>Interest Rate: 3.5%</p>
+            </div>
+            <div class="gallery-item" onclick="selectFinancing(this, 'Bank B', 4.2)">
+                <img src="https://via.placeholder.com/200" alt="Bank B">
+                <h3>Bank B</h3>
+                <p>Interest Rate: 4.2%</p>
+            </div>
+            <div class="gallery-item" onclick="selectFinancing(this, 'Bank C', 3.8)">
+                <img src="https://via.placeholder.com/200" alt="Bank C">
+                <h3>Bank C</h3>
+                <p>Interest Rate: 3.8%</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button onclick="navigateStage(6, 'prev')">Previous</button>
+            <button onclick="navigateStage(6, 'next')">Next to Preview</button>
+        </div>
+    </section>
+
+    <!-- Step 7: Window Shop and Order Materials -->
+    <section class="stage" id="stage-7">
+        <h2>Step 7: Window Shop and Order Materials</h2>
+        <p>Select construction materials for your project:</p>
+        <div class="gallery">
+            <div class="gallery-item" onclick="selectMaterial(this, 'Cement', 50)">
+                <img src="https://via.placeholder.com/200" alt="Cement">
+                <h3>Cement</h3>
+                <p>Price: $50/bag</p>
+            </div>
+            <div class="gallery-item" onclick="selectMaterial(this, 'Steel Rods', 100)">
+                <img src="https://via.placeholder.com/200" alt="Steel Rods">
+                <h3>Steel Rods</h3>
+                <p>Price: $100/bundle</p>
+            </div>
+            <div class="gallery-item" onclick="selectMaterial(this, 'Bricks', 75)">
+                <img src="https://via.placeholder.com/200" alt="Bricks">
+                <h3>Bricks</h3>
+                <p>Price: $75/pallet</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button onclick="navigateStage(7, 'prev')">Previous</button>
+            <button onclick="navigateStage(7, 'next')">Next to Preview</button>
+        </div>
+    </section>
+
+    <!-- Step 8: Start Construction -->
+    <section class="stage" id="stage-8">
+        <h2>Step 8: Start Construction</h2>
+        <div class="form-wrapper">
+            <form id="start-construction-form" onsubmit="submitStartConstruction(event)">
+                <p>Before we start construction, please confirm:</p>
+                <div class="form-group">
+                    <label for="terms-agreement">Do you agree to our terms and conditions?</label>
+                    <input type="checkbox" id="terms-agreement" required> I agree to the <a href="https://dummy-url.com/terms">terms and conditions</a>.
+                </div>
+
+                <div class="nav-buttons">
+                    <button onclick="navigateStage(8, 'prev')">Previous</button>
+                    <button type="submit">Start Construction</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Step 9: Track Construction -->
+    <section class="stage" id="stage-9">
+        <div class="content-container">
+            <h2>Step 9: Track Construction</h2>
+            <ul class="timeline">
+                <li class="completed">Foundation: <strong>Completed</strong> ✅ (Time: 2 weeks)</li>
+                <li class="completed">Framing: <strong>Completed</strong> ✅ (Time: 1 week)</li>
+                <li class="pending">Roofing: <strong>Pending</strong> (Estimated Time: 1 week)</li>
+                <li class="pending">Electrical Work: <strong>Pending</strong> (Estimated Time: 1 week)</li>
+                <li class="pending">Plumbing: <strong>Pending</strong> (Estimated Time: 1 week)</li>
+                <li class="pending">Interior Finishing: <strong>Pending</strong> (Estimated Time: 2 weeks)</li>
+            </ul>
+
+            <div class="nav-buttons">
+                <button onclick="navigateStage(9, 'prev')">Previous</button>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    let currentStep = 1;
+
+    // Function to toggle profile modal and hamburger menu
+    function toggleProfile() {
+        document.getElementById("profile-modal").classList.toggle("active");
+        document.getElementById("hamburger").classList.toggle("active");
+    }
+
+    // Function to navigate between stages and update progress bar
+    function navigateStage(currentStage, direction) {
+        const current = document.getElementById(`stage-${currentStage}`);
+        let nextStage = currentStage;
+
+        if (direction === 'next') {
+            nextStage = currentStage + 1;
+        } else if (direction === 'prev') {
+            nextStage = currentStage - 1;
+        }
+
+        const next = document.getElementById(`stage-${nextStage}`);
+
+        if (next) {
+            current.classList.remove('active');
+            next.classList.add('active');
+            updateProgressBar(nextStage);
+        }
+    }
+
+    // Function to update progress bar and text
+    function updateProgressBar(step) {
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-text");
+        let progress = (step - 1) * (100 / 9);  // There are 9 steps now
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `${Math.round(progress)}% Complete - Step ${step} of 9`;
+    }
+
+    // Function to handle form submission in Step 5 (BOQ)
+    function submitBOQForm(event) {
+        event.preventDefault(); // Prevent form submission from refreshing the page
+        alert("BOQ Submitted!");
+        navigateStage(5, 'next'); // Move to next stage after submitting the BOQ
+    }
+
+    // Function to handle form submission in Step 3 (Permit)
+    function submitPermitForm(event) {
+        event.preventDefault(); // Prevent form submission from refreshing the page
+        alert("Construction Permit Submitted!");
+        navigateStage(3, 'next'); // Move to next stage after submitting the permit
+    }
+
+    // Function to handle form submission in Step 8 (Start Construction)
+    function submitStartConstruction(event) {
+        event.preventDefault(); // Prevent form submission from refreshing the page
+        const termsAgreed = document.getElementById("terms-agreement").checked;
+        if (termsAgreed) {
+            navigateStage(8, 'next'); // Move to stage 9 after agreeing to terms
+        } else {
+            alert("Please agree to the terms and conditions to proceed.");
+        }
+    }
+
+    // Other functions for selecting land, maps, experts, materials, etc.
+    function selectLand(element, plotName, location) {
+        // Remove selected class from all gallery items
+        const allItems = document.querySelectorAll('.gallery-item');
+        allItems.forEach(item => item.classList.remove('selected'));
+        
+        // Add selected class to the clicked item
+        element.classList.add('selected');
+
+        alert(`Selected: ${plotName} in ${location}`);
+    }
+
+    function selectMap(element, mapName, bedrooms) {
+        alert(`Selected: ${mapName} (${bedrooms} bedrooms)`);
+    }
+
+    function selectExpert(element, expertName, projects, charge) {
+        alert(`Selected: ${expertName} with ${projects} completed projects ($${charge}/day)`);
+    }
+
+    function selectFinancing(element, bankName, rate) {
+        alert(`Selected: ${bankName} with ${rate}% interest rate`);
+    }
+
+    function selectMaterial(element, materialName, price) {
+        alert(`Selected: ${materialName} for $${price}`);
+    }
+
+    // Initial setup - ensure the first stage is visible on load
+    document.addEventListener("DOMContentLoaded", function() {
+        const firstStage = document.getElementById("stage-1");
+        if (firstStage) {
+            firstStage.classList.add("active");
+        }
+    });
+
+</script>
+
+</body>
+</html>
